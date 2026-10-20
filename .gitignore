@@ -1,9 +1,55 @@
-# Python cache files
-__pycache__/
+Python cache files
+
+pycache/
 *.py[cod]
+*$py.class
 
-# Virtual environment
+Compiled extensions
+
+*.so
+
+Build and distribution
+
+build/
+dist/
+*.egg-info/
+wheels/
+
+Virtual environments
+
 .venv/
+venv/
+env/
+ENV/
 
-# macOS
+Environment variables and secrets
+
+.env
+.envrc
+
+Test and coverage files
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+Jupyter
+
+.ipynb_checkpoints/
+
+Python tooling
+
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.pyre/
+
+macOS
+
 .DS_Store
+
+VS Code
+
+Uncomment if you want to ignore workspace settings
+
+.vscode/
