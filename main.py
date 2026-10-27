@@ -84,10 +84,6 @@ for mu in np.arange(0.1, 1.01, 0.1):
         va = "bottom"
     )
 
-# Label each point with the corresponding tyre friction coefficient
-for i, mu in enumerate(tyre_friction_coefficients):
-    plt.annotate(f"{mu:.1f}", (front_forces_N[i], rear_forces_N[i]), xytext=(5,5), textcoords='offset points', fontsize=8)
-
 # Set axis labels and title
 plt.xlabel("Front Braking Force (N)")
 plt.ylabel("Rear Braking Force (N)")
