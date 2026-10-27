@@ -55,7 +55,7 @@ def calculate_braking_curve(tyre_friction_coefficients: np.ndarray) -> tuple[np.
     return np.array(front_forces_N), np.array(rear_forces_N)
 
 # Generate a range of tyre friction coefficients for the braking curve
-tyre_friction_coefficients = np.linspace(0.1, 1.0, 10)
+tyre_friction_coefficients = np.linspace(0.0, 1.0, 10)
 
 # Calculate the front and rear braking forces
 front_forces_N, rear_forces_N = calculate_braking_curve(tyre_friction_coefficients)
