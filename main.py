@@ -32,18 +32,27 @@ def calculate_rear_braking_force_N(tyre_friction_coefficient: float, weight_tran
 def calculate_braking_curve(tyre_friction_coefficients: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Calculate the braking curve for a range of tyre friction coefficients."""
 
-    # Assume braking deceleration is tyre friction coefficient * gravity
-    decelerations_ms2 = tyre_friction_coefficients * GRAVITY_MS2
+    # Initialise lists to store front and rear braking forces
+    front_forces_N = []
+    rear_forces_N = []
 
-    # Calculate weight transfer for each friction coefficient
-    weight_transfers_N = np.array([calculate_weight_transfer_N(deceleration) for deceleration in decelerations_ms2])
+    # Iterate over the range of tyre friction coefficients to calculate braking forces
+    for mu in tyre_friction_coefficients:
+        # Assume braking deceleration is tyre friction coefficient * gravity
+        deceleration_ms2 = mu * GRAVITY_MS2
 
-    # Calculate front and rear braking forces for each friction coefficient
-    front_forces_N = tyre_friction_coefficients * (static_front_load_N + weight_transfers_N)
+        # Calculate weight transfer
+        weight_transfer_N = calculate_weight_transfer_N(deceleration_ms2)
 
-    rear_forces_N = tyre_friction_coefficients * (static_rear_load_N - weight_transfers_N)
+        # Calculate front and rear braking forces
+        front_force_N = calculate_front_braking_force_N(mu, weight_transfer_N)
+        rear_force_N = calculate_rear_braking_force_N(mu, weight_transfer_N)
 
-    return front_forces_N, rear_forces_N
+        # Append the calculated forces to the lists
+        front_forces_N.append(front_force_N)
+        rear_forces_N.append(rear_force_N)
+    
+    return np.array(front_forces_N), np.array(rear_forces_N)
 
 # Generate a range of tyre friction coefficients for the braking curve
 tyre_friction_coefficients = np.linspace(0.1, 1.0, 10)
