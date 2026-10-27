@@ -36,7 +36,7 @@ def calculate_braking_curve(tyre_friction_coefficients: np.ndarray) -> tuple[np.
     decelerations_ms2 = tyre_friction_coefficients * GRAVITY_MS2
 
     # Calculate weight transfer for each friction coefficient
-    weight_transfers_N = (MASS_KG * decelerations_ms2 * CG_HEIGHT_M) / WHEELBASE_M
+    weight_transfers_N = np.array([calculate_weight_transfer_N(deceleration) for deceleration in decelerations_ms2])
 
     # Calculate front and rear braking forces for each friction coefficient
     front_forces_N = tyre_friction_coefficients * (static_front_load_N + weight_transfers_N)
@@ -50,6 +50,12 @@ tyre_friction_coefficients = np.linspace(0.1, 1.0, 10)
 
 # Calculate the front and rear braking forces
 front_forces_N, rear_forces_N = calculate_braking_curve(tyre_friction_coefficients)
+
+# Check both axle forces sum to the total braking force
+total_braking_force_N = front_forces_N + rear_forces_N
+expected_total_braking_force_N = tyre_friction_coefficients * MASS_KG * GRAVITY_MS2
+
+assert np.allclose(total_braking_force_N, expected_total_braking_force_N), ("Total braking force does not match expected value.")
 
 # Plot the braking forces
 plt.plot(front_forces_N, rear_forces_N, marker="o", label="Ideal Braking Curve", zorder=3)
