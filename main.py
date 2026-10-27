@@ -52,15 +52,52 @@ tyre_friction_coefficients = np.linspace(0.1, 1.0, 10)
 front_forces_N, rear_forces_N = calculate_braking_curve(tyre_friction_coefficients)
 
 # Plot the braking forces
-plt.plot(front_forces_N, rear_forces_N, marker="o", label="Ideal Braking Curve")
+plt.plot(front_forces_N, rear_forces_N, marker="o", label="Ideal Braking Curve", zorder=3)
+
+# Add diagonal lines for tyre friction coefficients
+front_force_line_N = np.linspace(0, MASS_KG * GRAVITY_MS2, 400)
+
+for mu in np.arange(0.1, 1.01, 0.1):
+    total_braking_force_N = mu * MASS_KG * GRAVITY_MS2
+    rear_force_line_N = total_braking_force_N - front_force_line_N
+
+    # Only plot the line where the rear braking force is non-negative
+    valid = rear_force_line_N >= 0
+
+    plt.plot(
+        front_force_line_N[valid],
+        rear_force_line_N[valid],
+        color = "lightgray",
+        linestyle = "--", 
+        linewidth = 0.9, 
+        zorder = 1 # Draw behind the main braking curve
+    )
+
+    plt.annotate(
+        f"{mu:.1f}",
+        (total_braking_force_N, 0),
+        xytext = (0, 5),
+        textcoords = "offset points",
+        fontsize = 8,
+        rotation = 0,
+        ha = "center",
+        va = "bottom"
+    )
 
 # Label each point with the corresponding tyre friction coefficient
 for i, mu in enumerate(tyre_friction_coefficients):
     plt.annotate(f"{mu:.1f}", (front_forces_N[i], rear_forces_N[i]), xytext=(5,5), textcoords='offset points', fontsize=8)
 
+# Set axis labels and title
 plt.xlabel("Front Braking Force (N)")
 plt.ylabel("Rear Braking Force (N)")
 plt.title("Ideal Braking Curve")
+
+# Start both axes at zero
+plt.xlim(left=0)
+plt.ylim(bottom=0)
+
+# Add grid and legend
 plt.grid(True)
 plt.legend()
 plt.tight_layout()
