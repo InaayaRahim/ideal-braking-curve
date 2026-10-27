@@ -55,7 +55,7 @@ def calculate_braking_curve(tyre_friction_coefficients: np.ndarray) -> tuple[np.
     return np.array(front_forces_N), np.array(rear_forces_N)
 
 # Generate a range of tyre friction coefficients for the braking curve
-tyre_friction_coefficients = np.linspace(0.0, 1.0, 10)
+tyre_friction_coefficients = np.linspace(0.0, 1.0, 11)
 
 # Calculate the front and rear braking forces
 front_forces_N, rear_forces_N = calculate_braking_curve(tyre_friction_coefficients)
@@ -65,6 +65,18 @@ total_braking_force_N = front_forces_N + rear_forces_N
 expected_total_braking_force_N = tyre_friction_coefficients * MASS_KG * GRAVITY_MS2
 
 assert np.allclose(total_braking_force_N, expected_total_braking_force_N), ("Total braking force does not match expected value.")
+
+# Print the calculated braking forces for verification
+print("\nIdeal Braking Curve Results")
+print("-" * 61)
+print(f"{'Tyre Friction Coefficient':<27}{'Front Force (N)':>17}{'Rear Force (N)':>17}")
+
+for i, mu in enumerate(tyre_friction_coefficients):
+    print(
+        f"{mu:<27.1f}"
+        f"{front_forces_N[i]:>17.2f}"
+        f"{rear_forces_N[i]:>17.2f}"
+    )
 
 # Plot the braking forces
 plt.plot(front_forces_N, rear_forces_N, marker="o", label="Ideal Braking Curve", zorder=3)
