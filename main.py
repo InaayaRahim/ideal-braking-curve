@@ -64,6 +64,7 @@ front_forces_N, rear_forces_N = calculate_braking_curve(tyre_friction_coefficien
 total_braking_force_N = front_forces_N + rear_forces_N
 expected_total_braking_force_N = tyre_friction_coefficients * MASS_KG * GRAVITY_MS2
 
+# If the assertion fails, it will raise an AssertionError with the provided message
 assert np.allclose(total_braking_force_N, expected_total_braking_force_N), ("Total braking force does not match expected value.")
 
 # Print the calculated braking forces for verification
